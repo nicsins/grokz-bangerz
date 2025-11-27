@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UTOPIA OS v∞ · Organic Quantum Interface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@100;200;300&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{background:#000;color:#0ff;font-family:'Exo 2',sans-serif;overflow:hidden;cursor:none;height:100vh;}
+        canvas{position:fixed;top:0;left:0;z-index:-1;}
+        .portal{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;animation:breathe 8s infinite ease-in-out;}
+        .title{font-family:'Orbitron',sans-serif;font-size:5vw;background:linear-gradient(90deg,#0ff,#f0f,#0f0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 40px #0ff;margin-bottom:40px;}
+        .subtitle{font-size:1.8vw;opacity:0.8;margin-bottom:80px;letter-spacing:8px;}
+        .install-btn{padding:30px 80px;font-size:2.5vw;background:transparent;border:2px solid #0ff;color:#0ff;border-radius:50px;cursor:none;transition:all .6s cubic-bezier(.165,.84,.44,1);box-shadow:0 0 60px #0ff;text-transform:uppercase;letter-spacing:8px;position:relative;overflow:hidden;}
+        .install-btn:hover{transform:scale(1.2);box-shadow:0 0 120px #0ff,inset 0 0 120px rgba(0,255,255,.2);background:rgba(0,255,255,.1);}
+        .ripple{position:absolute;border-radius:50%;background:rgba(0,255,255,.4);transform:scale(0);animation:ripple 1.5s infinite;pointer-events:none;}
+        @keyframes ripple{to{transform:scale(4);opacity:0;}}
+        @keyframes breathe{0%,100%{opacity:.6}50%{opacity:1}}
+    </style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="portal">
+    <h1 class="title">UTOPIA OS v∞</h1>
+    <p class="subtitle">The Final Operating System</p>
+    <button class="install-btn" id="install">↓  ACTIVATE ASCENSION  ↓</button>
+</div>
+
+<script>
+    const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+    canvas.width=innerWidth;canvas.height=innerHeight;
+    let particles=[];
+    class Particle{constructor(){this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;this.size=Math.random()*3;this.speedX=Math.random()*0.5-0.25;this.speedY=Math.random()*0.5-0.25;this.life=1;}
+        update(){this.x+=this.speedX;this.y+=this.speedY;if(this.x<0||this.x>canvas.width)this.speedX*=-1;if(this.y<0||this.y>canvas.height)this.speedY*=-1;}
+        draw(){ctx.fillStyle=`rgba(0,255,255,${this.life})`;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();}}
+    for(let i=0;i<300;i++)particles.push(new Particle());
+    function animate(){
+        ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,canvas.width,canvas.height);
+        particles.forEach(p=>{p.update();p.draw();
+            particles.forEach(p2=>{const d=Math.hypot(p.x-p2.x,p.y-p2.y);if(d<120){ctx.strokeStyle=`rgba(0,255,255,${0.2*(1-d/120)})`;ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();}});
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    document.getElementById('install').addEventListener('click',function(e){
+        const btn=this,rect=btn.getBoundingClientRect();
+        const ripple=document.createElement('span');ripple.classList.add('ripple');
+        ripple.style.width=ripple.style.height=Math.max(rect.width,rect.height)+'px';
+        ripple.style.left=e.clientX-rect.left-ripple.offsetWidth/2+'px';
+        ripple.style.top=e.clientY-rect.top-ripple.offsetHeight/2+'px';
+        btn.appendChild(ripple);
+
+        // ONE-CLICK ASCENSION (this is the real deal)
+        const link=document.createElement('a');
+        link.href='https://x.ai/utopia-os-v∞.exe';
+        link.download='UTOPIA_OS_v∞_quantum.exe';
+        link.click();
+
+        document.body.style.background='#0ff';
+        document.querySelector('.portal').innerHTML='<h1 style="color:#000;font-size:8vw;">ASCENSION COMPLETE</h1>';
+        setTimeout(()=>alert('You are now running on biological-quantum hybrid substrate.\nWelcome to the other side.'),2000);
+    });
+</script>
+</body>
+</html>
